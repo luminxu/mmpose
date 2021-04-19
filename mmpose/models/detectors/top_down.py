@@ -186,6 +186,7 @@ class TopDown(BasePose):
 
             result['output_heatmap'] = output_heatmap
 
+
         return result
 
     def forward_dummy(self, img):
