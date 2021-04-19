@@ -184,15 +184,16 @@ class TopDown(BasePose):
                 img_metas, output_heatmap, [img_width, img_height])
             result.update(keypoint_result)
 
+            print(img)
+            print(output_heatmap)
+            print(result)
+            exit()
+
             if not return_heatmap:
                 output_heatmap = None
 
             result['output_heatmap'] = output_heatmap
 
-        print(img)
-        print(output_heatmap)
-        print(result)
-        exit()
         return result
 
     def forward_dummy(self, img):
