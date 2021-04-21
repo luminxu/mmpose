@@ -538,9 +538,6 @@ class HRNet(nn.Module):
         x = self.relu(x)
         x = self.layer1(x)
 
-        print('step1')
-        print(x)
-
         x_list = []
         for i in range(self.stage2_cfg['num_branches']):
             if self.transition1[i] is not None:
@@ -564,9 +561,6 @@ class HRNet(nn.Module):
             else:
                 x_list.append(y_list[i])
         y_list = self.stage4(x_list)
-
-        print('step2')
-        print(y_list)
 
         return y_list
 
