@@ -60,6 +60,9 @@ class TopDown(BasePose):
 
         self.init_weights(pretrained=pretrained)
 
+        self.image_file = None
+        self.num_people = 1
+
     @property
     def with_neck(self):
         """Check if has keypoint_head."""
@@ -153,8 +156,17 @@ class TopDown(BasePose):
         """Defines the computation performed at every call when testing."""
         import torch
         img = torch.ones([1, 3, 64, 64]).cuda()
-        print(img_metas)
-        exit()
+
+        image_file = img_metas['image_file']
+        if image_file == self.image_file:
+            self.num_people += 1
+        else:
+            if self.num_people == 1:
+                print(img_metas)
+                exit()
+            else:
+                self.image_file = image_file
+                self.num_people = 1
 
         assert img.size(0) == len(img_metas)
         batch_size, _, img_height, img_width = img.shape
