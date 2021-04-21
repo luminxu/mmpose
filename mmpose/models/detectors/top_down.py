@@ -61,7 +61,7 @@ class TopDown(BasePose):
         self.init_weights(pretrained=pretrained)
 
         self.image_file = None
-        self.num_people = 1
+        self.num_people = 0
 
     @property
     def with_neck(self):
