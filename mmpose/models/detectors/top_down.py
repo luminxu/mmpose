@@ -189,6 +189,7 @@ class TopDown(BasePose):
             # print(result)
             # exit()
 
+
             if not return_heatmap:
                 output_heatmap = None
 
