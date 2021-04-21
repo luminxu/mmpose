@@ -157,7 +157,7 @@ class TopDown(BasePose):
         import torch
         img = torch.ones([1, 3, 64, 64]).cuda()
 
-        image_file = img_metas['image_file']
+        image_file = img_metas[0]['image_file']
         if image_file == self.image_file:
             self.num_people += 1
         else:
