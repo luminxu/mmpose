@@ -191,17 +191,9 @@ class TopDownSimpleHead(TopDownBaseHead):
 
     def forward(self, x):
         """Forward function."""
-        print('step1')
-        print(x)
         x = self._transform_inputs(x)
-        print('step2')
-        print(x)
         x = self.deconv_layers(x)
-        print('step3')
-        print(x)
         x = self.final_layer(x)
-        print('step4')
-        print(x)
         return x
 
     def inference_model(self, x, flip_pairs=None):

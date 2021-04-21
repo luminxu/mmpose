@@ -184,10 +184,10 @@ class TopDown(BasePose):
                 img_metas, output_heatmap, [img_width, img_height])
             result.update(keypoint_result)
 
-            print(img)
-            print(output_heatmap)
-            print(result)
-            exit()
+            # print(img)
+            # print(output_heatmap)
+            # print(result)
+            # exit()
 
             if not return_heatmap:
                 output_heatmap = None
