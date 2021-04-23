@@ -177,8 +177,7 @@ class TopDown(BasePose):
                 output_heatmap = (output_heatmap +
                                   output_flipped_heatmap) * 0.5
 
-        import torch
-        output_heatmap = torch.ones([1, 68, 64, 64]).cuda()
+        output_heatmap = np.zeros([1, 68, 64, 64])
         output_heatmap[0, 0, 32, 32] = 1
 
         if self.with_keypoint:
