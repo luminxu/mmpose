@@ -60,9 +60,6 @@ class TopDown(BasePose):
 
         self.init_weights(pretrained=pretrained)
 
-        self.image_file = None
-        self.num_people = 0
-
     @property
     def with_neck(self):
         """Check if has keypoint_head."""
@@ -157,17 +154,6 @@ class TopDown(BasePose):
         import torch
         img = torch.ones([1, 3, 64, 64]).cuda()
 
-        image_file = img_metas[0]['image_file']
-        if image_file == self.image_file:
-            self.num_people += 1
-        else:
-            if self.num_people == 1:
-                print(img_metas)
-                exit()
-            else:
-                self.image_file = image_file
-                self.num_people = 1
-
         assert img.size(0) == len(img_metas)
         batch_size, _, img_height, img_width = img.shape
         if batch_size > 1:
@@ -198,10 +184,12 @@ class TopDown(BasePose):
                 img_metas, output_heatmap, [img_width, img_height])
             result.update(keypoint_result)
 
-            # print(img)
-            # print(output_heatmap)
-            # print(result)
-            # exit()
+            if img_metas[0]['image_file'][-10:] == '463730.jpg':
+                print(result)
+                print(output_heatmap)
+                print(img_metas)
+                print([img_width, img_height])
+                exit()
 
             if not return_heatmap:
                 output_heatmap = None
