@@ -151,8 +151,6 @@ class TopDown(BasePose):
 
     def forward_test(self, img, img_metas, return_heatmap=False, **kwargs):
         """Defines the computation performed at every call when testing."""
-        import torch
-        img = torch.ones([1, 3, 64, 64]).cuda()
 
         assert img.size(0) == len(img_metas)
         batch_size, _, img_height, img_width = img.shape
@@ -178,6 +176,10 @@ class TopDown(BasePose):
                     features_flipped, img_metas[0]['flip_pairs'])
                 output_heatmap = (output_heatmap +
                                   output_flipped_heatmap) * 0.5
+
+        import torch
+        output_heatmap = torch.ones([1, 68, 64, 64]).cuda()
+        output_heatmap[0, 0, 32, 32] = 1
 
         if self.with_keypoint:
             keypoint_result = self.keypoint_head.decode_keypoints(
