@@ -177,8 +177,8 @@ class TopDown(BasePose):
                 output_heatmap = (output_heatmap +
                                   output_flipped_heatmap) * 0.5
 
-        output_heatmap = np.zeros([1, 68, 64, 64])
-        output_heatmap[0, 0, 32, 32] = 1
+        # output_heatmap = np.zeros([1, 68, 64, 64])
+        # output_heatmap[0, 0, 32, 32] = 1
 
         if self.with_keypoint:
             keypoint_result = self.keypoint_head.decode_keypoints(
