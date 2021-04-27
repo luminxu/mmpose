@@ -264,16 +264,27 @@ class BottomUpCocoDataset(BottomUpBaseDataset):
                     'area': area,
                 })
 
-        oks_nmsed_kpts = []
+        # oks_nmsed_kpts = []
+        # for img in kpts.keys():
+        #     img_kpts = kpts[img]
+        #     keep = []
+        #     if len(keep) == 0:
+        #         oks_nmsed_kpts.append(img_kpts)
+        #     else:
+        #         oks_nmsed_kpts.append([img_kpts[_keep] for _keep in keep])
+        #
+        # self._write_coco_keypoint_results(oks_nmsed_kpts, res_file)
+
+        from ....core.post_processing import oks_nms, soft_oks_nms
+        oks_thr = 0.9
+        valid_kpts = []
         for img in kpts.keys():
             img_kpts = kpts[img]
-            keep = []
-            if len(keep) == 0:
-                oks_nmsed_kpts.append(img_kpts)
-            else:
-                oks_nmsed_kpts.append([img_kpts[_keep] for _keep in keep])
+            nms = soft_oks_nms if self.soft_nms else oks_nms
+            keep = nms(list(img_kpts), oks_thr, sigmas=self.sigmas)
+            valid_kpts.append([img_kpts[_keep] for _keep in keep])
 
-        self._write_coco_keypoint_results(oks_nmsed_kpts, res_file)
+        self._write_coco_keypoint_results(valid_kpts, res_file)
 
         info_str = self._do_python_keypoint_eval(res_file)
         name_value = OrderedDict(info_str)
