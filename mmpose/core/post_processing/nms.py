@@ -123,7 +123,7 @@ def oks_nms(kpts_db, thr, sigmas=None, vis_thr=None):
     return keep
 
 
-def _rescore(overlap, scores, thr, type='gaussian'):
+def _rescore(overlap, scores, thr=0.3, sigma=0.5, type='gaussian'):
     """Rescoring mechanism gaussian or linear.
 
     Args:
@@ -142,17 +142,17 @@ def _rescore(overlap, scores, thr, type='gaussian'):
         inds = np.where(overlap >= thr)[0]
         scores[inds] = scores[inds] * (1 - overlap[inds])
     else:
-        scores = scores * np.exp(-overlap**2 / thr)
+        scores = scores * np.exp(-overlap**2 / sigma)
 
     return scores
 
 
-def soft_oks_nms(kpts_db, thr, max_dets=20, sigmas=None, vis_thr=None):
+def soft_oks_nms(kpts_db, thr, Nt=0.3, max_dets=20, sigmas=None, vis_thr=None):
     """Soft OKS NMS implementations.
 
     Args:
         kpts_db
-        thr: retain oks overlap < thr.
+        thr: retain score > thr.
         max_dets: max number of detections to keep.
         sigmas: Keypoint labelling uncertainty.
 
@@ -170,15 +170,17 @@ def soft_oks_nms(kpts_db, thr, max_dets=20, sigmas=None, vis_thr=None):
     scores = scores[order]
 
     keep = np.zeros(max_dets, dtype=np.intp)
+    keep_score = np.zeros(max_dets, dtype=np.intp)
     keep_cnt = 0
     while len(order) > 0 and keep_cnt < max_dets:
         i = order[0]
+        keep_score[keep_cnt] = scores[0]
 
         oks_ovr = oks_iou(kpts[i], kpts[order[1:]], areas[i], areas[order[1:]],
                           sigmas, vis_thr)
 
         order = order[1:]
-        scores = _rescore(oks_ovr, scores[1:], thr)
+        scores = _rescore(oks_ovr, scores[1:], Nt)
 
         tmp = scores.argsort()[::-1]
         order = order[tmp]
@@ -188,5 +190,6 @@ def soft_oks_nms(kpts_db, thr, max_dets=20, sigmas=None, vis_thr=None):
         keep_cnt += 1
 
     keep = keep[:keep_cnt]
+    keep = keep[np.where(keep_score > thr)[0]]
 
     return keep

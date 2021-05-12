@@ -282,7 +282,7 @@ class BottomUpCocoDataset(BottomUpBaseDataset):
             img_kpts = kpts[img]
             # nms = soft_oks_nms if self.soft_nms else oks_nms
             nms = soft_oks_nms
-            keep = nms(list(img_kpts), oks_thr, sigmas=self.sigmas)
+            keep = nms(list(img_kpts), oks_thr,  sigmas=self.sigmas)
             valid_kpts.append([img_kpts[_keep] for _keep in keep])
 
         self._write_coco_keypoint_results(valid_kpts, res_file)

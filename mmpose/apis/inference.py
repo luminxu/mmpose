@@ -10,6 +10,7 @@ from mmcv.runner import load_checkpoint
 from mmpose.datasets.pipelines import Compose
 from mmpose.models import build_posenet
 from mmpose.utils.hooks import OutputHook
+from mmpose.core.post_processing import soft_oks_nms, oks_nms
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 
@@ -407,6 +408,7 @@ def inference_top_down_pose_model(model,
 
 def inference_bottom_up_pose_model(model,
                                    img_or_path,
+                                   oks_thr=0.9,
                                    return_heatmap=False,
                                    outputs=None):
     """Inference a single image.
@@ -419,6 +421,7 @@ def inference_bottom_up_pose_model(model,
     Args:
         model (nn.Module): The loaded pose model.
         img_or_path (str| np.ndarray): Image filename or loaded image.
+        oks_thr (float): retain oks overlap < oks_thr.
         return_heatmap (bool) : Flag to return heatmap, default: False
         outputs (list(str) | tuple(str)) : Names of layers whose outputs
             need to be returned, default: None
@@ -464,7 +467,7 @@ def inference_bottom_up_pose_model(model,
         # scatter to specified GPU
         data = scatter(data, [device])[0]
     else:
-        # just get the actual data from DataContainer
+        # get the actual data from DataContainer
         data['img_metas'] = data['img_metas'].data[0]
 
     with OutputHook(model, outputs=outputs, as_tensor=False) as h:
@@ -481,10 +484,18 @@ def inference_bottom_up_pose_model(model,
 
         returned_outputs.append(h.layer_outputs)
 
-        for pred in result['preds']:
+        for idx, pred in enumerate(result['preds']):
+            area = (np.max(pred[:, 0]) - np.min(pred[:, 0])) * (
+                    np.max(pred[:, 1]) - np.min(pred[:, 1]))
             pose_results.append({
                 'keypoints': pred[:, :3],
+                'score': result['scores'][idx],
+                'area': area,
             })
+
+    # pose nms
+    keep = oks_nms(list(pose_results), oks_thr)
+    pose_results = [pose_results[_keep] for _keep in keep]
 
     return pose_results, returned_outputs
 
