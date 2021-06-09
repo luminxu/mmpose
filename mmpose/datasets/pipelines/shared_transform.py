@@ -426,17 +426,17 @@ class MultitaskGatherTarget:
         for pipeline in self.pipelines:
             results_head = pipeline(results)
             _target.append(results_head['target'])
-            _target_weight.append(results_head['target_weight'])
+            # _target_weight.append(results_head['target_weight'])
 
         # reorganize generated target, target_weights according
         # to self.pipelines_indices
         target, target_weight = [], []
         for ind in self.pipeline_indices:
             target.append(_target[ind])
-            target_weight.append(_target_weight[ind])
+            # target_weight.append(_target_weight[ind])
 
         results['target'] = target
-        results['target_weight'] = target_weight
+        # results['target_weight'] = target_weight
         return results
 
 
