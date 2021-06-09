@@ -8,10 +8,12 @@ from .topdown_heatmap_base_head import TopdownHeatmapBaseHead
 from .topdown_heatmap_multi_stage_head import (TopdownHeatmapMSMUHead,
                                                TopdownHeatmapMultiStageHead)
 from .topdown_heatmap_simple_head import TopdownHeatmapSimpleHead
+from .paf_head import PAFHead
+from .deconv_head import DeconvHead
 
 __all__ = [
     'TopdownHeatmapSimpleHead', 'TopdownHeatmapMultiStageHead',
     'TopdownHeatmapMSMUHead', 'TopdownHeatmapBaseHead',
     'AEHigherResolutionHead', 'AESimpleHead', 'DeepposeRegressionHead',
-    'TemporalRegressionHead', 'Interhand3DHead', 'HMRMeshHead'
+    'TemporalRegressionHead', 'Interhand3DHead', 'HMRMeshHead', 'PAFHead', 'DeconvHead'
 ]
