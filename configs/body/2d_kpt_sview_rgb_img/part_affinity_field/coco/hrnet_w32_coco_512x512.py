@@ -186,7 +186,7 @@ val_pipeline = [
 
 test_pipeline = val_pipeline
 
-data_root = '/data/coco'
+data_root = 'data/coco'
 data = dict(
     samples_per_gpu=24,
     workers_per_gpu=2,
