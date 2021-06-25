@@ -51,8 +51,7 @@ data_cfg = dict(
 model = dict(
     type='PartAffinityField',
     pretrained=None,
-    backbone=dict(type='PoseEstimationWithMobileNet',
-                  num_refinement_stages=3),
+    backbone=dict(type='PoseEstimationWithMobileNet', num_refinement_stages=3),
     keypoint_head=dict(
         type='PAFHead',
         heatmap_heads_cfg=[
@@ -139,10 +138,7 @@ val_pipeline = [
         type='BottomUpResizeAlign',
         transforms=[
             dict(type='ToTensor'),
-            dict(
-                type='NormalizeTensor',
-                mean=[0.5, 0.5, 0.5],
-                std=[1, 1, 1]),
+            dict(type='NormalizeTensor', mean=[0.5, 0.5, 0.5], std=[1, 1, 1]),
         ]),
     dict(
         type='Collect',

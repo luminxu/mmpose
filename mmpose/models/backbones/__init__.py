@@ -2,6 +2,7 @@ from .alexnet import AlexNet
 from .cpm import CPM
 from .hourglass import HourglassNet
 from .hrnet import HRNet
+from .lightweight_openpose import PoseEstimationWithMobileNet
 from .mobilenet_v2 import MobileNetV2
 from .mobilenet_v3 import MobileNetV3
 from .mspn import MSPN
@@ -17,7 +18,6 @@ from .shufflenet_v1 import ShuffleNetV1
 from .shufflenet_v2 import ShuffleNetV2
 from .tcn import TCN
 from .vgg import VGG
-from .lightweight_openpose import PoseEstimationWithMobileNet
 
 __all__ = [
     'AlexNet', 'HourglassNet', 'HRNet', 'MobileNetV2', 'MobileNetV3', 'RegNet',

@@ -1,7 +1,9 @@
 import torch
 
-read_path = '/home/SENSETIME/xulumin/luminxu/paf_model/checkpoint_iter_370000.pth'
-write_path = '/home/SENSETIME/xulumin/luminxu/paf_model/checkpoint_lightweight_openpose.pth'
+read_path = '/home/SENSETIME/xulumin/luminxu/paf_model/' \
+            'checkpoint_iter_370000.pth'
+write_path = '/home/SENSETIME/xulumin/luminxu/paf_model/' \
+             'checkpoint_lightweight_openpose.pth'
 
 state_dict = torch.load(read_path)['state_dict']
 
