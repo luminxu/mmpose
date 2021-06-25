@@ -62,17 +62,21 @@ class BottomUpCocoDataset(BottomUpBaseDataset):
         ]
 
         # joint index starts from 0
-        self.ann_info['skeleton'] = [[15, 13], [13, 11], [16, 14], [14, 12],
-                                     [11, 12], [5, 11], [6, 12], [5, 6],
-                                     [5, 7], [6, 8], [7, 9], [8, 10], [1, 2],
-                                     [0, 1], [0, 2], [1, 3], [2, 4], [3, 5],
-                                     [4, 6]]
+        # self.ann_info['skeleton'] = [[15, 13], [13, 11], [16, 14], [14, 12],
+        #                              [11, 12], [5, 11], [6, 12], [5, 6],
+        #                              [5, 7], [6, 8], [7, 9], [8, 10], [1, 2],
+        #                              [0, 1], [0, 2], [1, 3], [2, 4], [3, 5],
+        #                              [4, 6]]
+
+        self.ann_info['skeleton'] = [[1, 8], [8, 9], [9, 10], [1, 11], [11, 12], [12, 13], [1, 2], [2, 3], [3, 4], [2, 16],
+                      [1, 5], [5, 6], [6, 7], [5, 17], [1, 0], [0, 14], [0, 15], [14, 16], [15, 17]]
+
 
         self.ann_info['use_different_joint_weights'] = False
         self.ann_info['joint_weights'] = np.array(
             [
                 1., 1., 1., 1., 1., 1., 1., 1.2, 1.2, 1.5, 1.5, 1., 1., 1.2,
-                1.2, 1.5, 1.5
+                1.2, 1.5, 1.5, 1., 1.
             ],
             dtype=np.float32).reshape((self.ann_info['num_joints'], 1))
 
@@ -147,6 +151,9 @@ class BottomUpCocoDataset(BottomUpBaseDataset):
             obj for obj in anno
             if obj['iscrowd'] == 0 or obj['num_keypoints'] > 0
         ]
+
+        for obj in anno:
+            obj['keypoints'] = obj['keypoints'] + [0, 0, 0, 0, 0, 0]
 
         joints = self._get_joints(anno)
         mask_list = [mask.copy() for _ in range(self.ann_info['num_scales'])]
